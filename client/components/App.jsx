@@ -17,7 +17,7 @@ class App extends React.Component {
     this.state = {
       data: [],
       service: SERVICE.BREACHEDACCOUNT,
-      searchText: '',
+      searchText: 'roylee0628@gmail.com',
     };
     this._handleChange = this._handleChange.bind(this);
     this._handleClick = this._handleClick.bind(this);
@@ -35,7 +35,7 @@ class App extends React.Component {
     this.setState({
       service: event.target.value,
       data: null
-    })
+    });
   }
 
   _handleClick() {
@@ -51,15 +51,10 @@ class App extends React.Component {
         }
       )
       .then((res) => {
-        if(res.data !== '') {
-          this.setState({
-            data: JSON.parse(res.data),
-          })
-        } else {
-          this.setState({
-            data: ''
-          })
-        }
+        const data = res.data !== '' ? JSON.parse(res.data) : '';
+        this.setState(prevState => {
+          data
+        });
       })
       .catch((err) => {
         throw err;
@@ -98,10 +93,12 @@ class App extends React.Component {
         <div className="header-container">
           <h1>Have you been PWNED?</h1>
           <p>Select breachedaccount for email and breach for domain searches</p>
-          <Search handleChange={this._handleChange} 
-                  handleClick={this._handleClick} 
-                  onChange={this._dropDownSelector}
-                  getAll={this._getAllBreaches}
+          <Search 
+            handleChange={this._handleChange} 
+            handleClick={this._handleClick} 
+            onChange={this._dropDownSelector}
+            getAll={this._getAllBreaches}
+            dropdownValue={this.state.service}
           />
           <h2>Results</h2>
         </div>
