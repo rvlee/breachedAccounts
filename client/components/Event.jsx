@@ -18,7 +18,7 @@ const Event = ({entry}) => {
         </div>
         <div className="entry">
           <label className="label">Description:</label>
-          <div className="entryValue">{entry.Description}</div>
+          <div className="entryValue" dangerouslySetInnerHTML={{ __html: entry.Description }} />
         </div>
       </li>
     </div>

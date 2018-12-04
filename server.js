@@ -8,19 +8,15 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 app.get('/breached', (req, res) => {
-  const {service, email} = req.query;
+  const {service, searchText} = req.query;
   request({
     headers: {
       'User-Agent': 'Pwnage-Checker-For-iOS'
     },
-    uri: `https://haveibeenpwned.com/api/v2/${service}/${email}`,
+    uri: `https://haveibeenpwned.com/api/v2/${service}/${searchText}`,
     method: 'GET'
   }, function(err, req, data) {
-    if(service === "breachedaccount" || data === ''){
-      res.send(data)
-    } else {
-      res.send([JSON.parse(data)])
-    }
+    res.json(data)
   })
 })
 

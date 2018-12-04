@@ -5,13 +5,13 @@ const Search = ({handleChange, handleClick, onChange, getAll}) => {
   return (
     <div>
       <label>Service</label>
-        <select defaultValue = "breachedaccount" onChange={onChange}>
-          {selection.map(entry => <option value={entry}>{entry}</option>)}
+        <select onChange={onChange}>
+          {selection.map((entry, index) => <option key={index} value={entry}>{entry}</option>)}
         </select>
       <label>Email or Domain</label>
         <input
           type="text"
-          id="email"
+          id="searchText"
           onChange={handleChange}>
         </input>
       <div>

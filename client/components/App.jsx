@@ -1,17 +1,23 @@
 import React from 'react';
 import axios from 'axios';
 import Search from './Search.jsx';
-import OutputContainer from './OutputContainer.jsx';
+import OutputResult from './OutputResult.jsx';
+import OutputBreach from './OutputBreach.jsx';
 
 const HOST = '/';
+
+const SERVICE = {
+  BREACHEDACCOUNT: 'breachedaccount',
+  BREACH: 'breach',
+}
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      service: 'breachedaccount',
-      email: ''
+      service: SERVICE.BREACHEDACCOUNT,
+      searchText: '',
     };
     this._handleChange = this._handleChange.bind(this);
     this._handleClick = this._handleClick.bind(this);
@@ -27,37 +33,46 @@ class App extends React.Component {
 
   _dropDownSelector(event) {
     this.setState({
-      service: event.target.value
+      service: event.target.value,
+      data: null
     })
   }
 
   _handleClick() {
-    const { service, email } = this.state;
-    axios.get(
-      `${HOST}breached`, 
-      {
-        params: {
-          service,
-          email
+    const { service, searchText } = this.state;
+    if (searchText !== '') {
+      axios.get(
+        `${HOST}breached`, 
+        {
+          params: {
+            service,
+            searchText
+          }
         }
-      }
-    )
-    .then((res) => {
-      this.setState({
-        data: res.data
+      )
+      .then((res) => {
+        if(res.data !== '') {
+          this.setState({
+            data: JSON.parse(res.data),
+          })
+        } else {
+          this.setState({
+            data: ''
+          })
+        }
+      })
+      .catch((err) => {
+        throw err;
       });
-    })
-    .catch((err) => {
-      throw err;
-    });
+    }
   }
 
   _getAllBreaches() {
-    axios.get(
-      `${HOST}breaches`)
+    axios.get(`${HOST}breaches`)
     .then((res) => {
       this.setState({
-        data: res.data
+        data: res.data,
+        service: SERVICE.BREACHEDACCOUNT
       });
     })
     .catch((err) => {
@@ -65,13 +80,15 @@ class App extends React.Component {
     });
   }
 
-  _checkAccount() {
-    const {data} = this.state;
-    if (data === '') {
-      return <center>Congratulations! You have not been breached </center>
-    } else {
-      return <OutputContainer data={data} />
+  _renderAccountInfo() {
+    const {data, service} = this.state;
+    switch (service) {
+      case SERVICE.BREACHEDACCOUNT:
+        return <OutputResult data={data} />
+      case SERVICE.BREACH:
+        return <OutputBreach data={data} />
     }
+    
   }
 
   render() {
@@ -87,8 +104,8 @@ class App extends React.Component {
                   getAll={this._getAllBreaches}
           />
           <h2>Results</h2>
-        </div>     
-        {this._checkAccount()}
+        </div>
+        {this._renderAccountInfo()}
       </div>
     )
   }
