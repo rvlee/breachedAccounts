@@ -3,7 +3,7 @@ import axios from 'axios';
 import Search from './Search.jsx';
 import OutputContainer from './OutputContainer.jsx';
 
-const HOST = 'http://localhost:3000/';
+const HOST = '/';
 
 class App extends React.Component {
   constructor(props) {
