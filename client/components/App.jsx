@@ -35,7 +35,7 @@ class App extends React.Component {
     this.setState({
       service: event.target.value,
       data: null
-    });
+    })
   }
 
   _handleClick() {
@@ -51,10 +51,11 @@ class App extends React.Component {
         }
       )
       .then((res) => {
+
         const data = res.data !== '' ? JSON.parse(res.data) : '';
-        this.setState(prevState => {
-          data
-        });
+          this.setState({
+            data
+          })
       })
       .catch((err) => {
         throw err;
