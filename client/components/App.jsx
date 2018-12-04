@@ -17,7 +17,7 @@ class App extends React.Component {
     this.state = {
       data: [],
       service: SERVICE.BREACHEDACCOUNT,
-      searchText: 'roylee0628@gmail.com',
+      searchText: '',
     };
     this._handleChange = this._handleChange.bind(this);
     this._handleClick = this._handleClick.bind(this);
